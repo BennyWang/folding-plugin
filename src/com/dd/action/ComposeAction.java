@@ -1,5 +1,7 @@
-package com.dd;
+package com.dd.action;
 
+import com.dd.SettingConfigurable;
+import com.dd.SettingsManager;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -8,7 +10,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
 
 public class ComposeAction extends AnAction {
-
     private static final String DECOMPOSE = "Ungroup";
     private static final String COMPOSE = "Group";
 
@@ -16,15 +17,8 @@ public class ComposeAction extends AnAction {
     public void actionPerformed(AnActionEvent actionEvent) {
         Object nav = actionEvent.getData(CommonDataKeys.NAVIGATABLE);
         if (nav instanceof PsiDirectory) {
-            PsiDirectory directory = (PsiDirectory) nav;
-
-            String path = directory.getVirtualFile().getPath();
-
-            if (SettingsManager.isComposed(path)) {
-                SettingsManager.removeComposedFolder(path);
-            } else {
-                SettingsManager.addComposedFolder(path);
-            }
+            String path = ((PsiDirectory) nav).getVirtualFile().getPath();
+            SettingsManager.toggleComposedFolder(path);
 
             Project project = actionEvent.getData(CommonDataKeys.PROJECT);
             if (project != null) {
@@ -39,19 +33,12 @@ public class ComposeAction extends AnAction {
         Project project = actionEvent.getData(CommonDataKeys.PROJECT);
         if (project != null) {
             Object nav = actionEvent.getData(CommonDataKeys.NAVIGATABLE);
-
             if (nav instanceof PsiDirectory) {
-                PsiDirectory directory = (PsiDirectory) nav;
-
-                String path = directory.getVirtualFile().getPath();
-
-                if (SettingsManager.isComposed(path)) {
-                    actionEvent.getPresentation().setText(DECOMPOSE);
-                } else {
-                    actionEvent.getPresentation().setText(COMPOSE);
+                String path = ((PsiDirectory) nav).getVirtualFile().getPath();
+                if (SettingConfigurable.isPathComposable(path)) {
+                    actionEvent.getPresentation().setText(SettingsManager.isComposed(path) ? DECOMPOSE : COMPOSE);
+                    enabledAndVisible = true;
                 }
-
-                enabledAndVisible = true;
             }
         }
         actionEvent.getPresentation().setEnabledAndVisible(enabledAndVisible);

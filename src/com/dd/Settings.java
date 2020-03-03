@@ -1,22 +1,11 @@
 package com.dd;
 
 import com.google.gson.annotations.SerializedName;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Settings {
-
     @SerializedName("DecomposedFolders")
-    private List<String> mComposedFolders;
-
-    @NotNull
-    public List<String> getComposedFolders() {
-        if(mComposedFolders == null) {
-            mComposedFolders = new ArrayList<String>();
-        }
-
-        return mComposedFolders;
-    }
+    public Set<String> composedFolders = new HashSet<>();
 }

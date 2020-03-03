@@ -55,8 +55,8 @@
     <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
     <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
     -->
+    <depends>com.intellij.modules.all</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <treeStructureProvider implementation="com.dd.ProjectStructureProvider"/>
@@ -75,15 +75,17 @@
     </project-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
-        <applicationConfigurable instance="com.dd.SettingConfigurable"/>
+        <applicationConfigurable groupId="tools" displayName="Android Folding" id="preferences.com.dd.SettingConfigurable" instance="com.dd.SettingConfigurable"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
-        <action id="ComposeAction" class="com.dd.ComposeAction">
+        <action id="ComposeAction" class="com.dd.action.ComposeAction">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>
+        <!--<action id="NewFoldingFileAction" class="com.dd.action.NewFoldingFileAction">
+            <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>-->
     </actions>
 
 </idea-plugin>
